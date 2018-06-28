@@ -67,7 +67,7 @@ function sortByLength(a, b) {
       1 : (a > b ? -1 : 0);
 }
 
-module.exports = function(dryRun) {
+module.exports = function(dryRun, cb) {
 
     var totCount = 0, delCount = 0, delSize = 0;
 
@@ -148,13 +148,16 @@ module.exports = function(dryRun) {
                     });
                 });
 
-                var msg =`${dryRun ? 'dryRun':''}  file count before delete: ${totCount}   deleted count: ${delCount}  deleted size: ${(delSize/1000).toLocaleString('en-US')}kB\n`;
+                var msg =`
+bower-purge
+${dryRun ? 'dryRun  ':''}file count before delete: ${totCount}   deleted count: ${delCount}  deleted size: ${(delSize/1000).toLocaleString('en-US')}kB\n`;
                 process.stdout.write(output.join(''));
                 process.stdout.write(msg);
 
                 console.log(output.join(''));
                 console.log(msg);
 
+                if (typeof cb==='function') {cb();}
             }
         );
     });
