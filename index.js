@@ -12,9 +12,10 @@ const walk = require('walk');
 
 const cfg = require(path.join(process.cwd(), 'bower.json')).bowerPurge;
 
+var missingLst=[];
+
 function extractComponents(list) {
   var components = {};
-  var missingLst=[];
 
   function callback(l) {
     _.each(l.dependencies, function (info, component) {
@@ -28,7 +29,7 @@ function extractComponents(list) {
   }
 
   callback(list);
-  if (missingLst.length>0) {console.log('missing components:', missingLst); process.stdout.write(`missing ${missingLst.length} components.`);}
+
   return components;
 }
 
@@ -67,8 +68,8 @@ function sortByLength(a, b) {
       1 : (a > b ? -1 : 0);
 }
 
-module.exports = function(dryRun, cb) {
-
+module.exports = function(opts, cb) {
+    opts = opts || {};
     var totCount = 0, delCount = 0, delSize = 0;
 
     if (!cfg  || _.isEmpty(cfg)) throw 'Configuration in bower.json is missing: "bowerPurge:{keep:[], deleteDir:[]}"';
@@ -134,7 +135,7 @@ module.exports = function(dryRun, cb) {
                         output.push(`  - ${_path}\n`);
                         delCount++;
 
-                        if (!dryRun) {
+                        if (!opts.dryRun) {
                             fs.removeSync(_path);
                         }
                     });
@@ -148,14 +149,23 @@ module.exports = function(dryRun, cb) {
                     });
                 });
 
-                var msg =`
-bower-purge
-${dryRun ? 'dryRun  ':''}file count before delete: ${totCount}   deleted count: ${delCount}  deleted size: ${(delSize/1000).toLocaleString('en-US')}kB\n`;
-                process.stdout.write(output.join(''));
-                process.stdout.write(msg);
+                var msg =`bower-purge: ${opts.dryRun ? '--dryRun':''} ${opts.quiet ? '--quiet':''}
+file count before delete: ${totCount}   deleted count: ${delCount}  deleted size: ${(delSize/1000).toLocaleString('en-US')}kB\n`;
+                
+                // if (!opts.quiet) process.stdout.write(output.join(''));
+                // process.stdout.write(msg);
 
-                console.log(output.join(''));
+                if (!opts.quiet) {
+                    console.log('............................................');
+                    console.log(`[bower-purge] start  ${opts.dryRun ? '--dryRun':''}`);
+                    console.log(output.join(''));
+                }
                 console.log(msg);
+                if (missingLst.length>0) {
+                    console.log('bower-purge: missing components:'); 
+                    console.log(missingLst);
+                    console.log(`bower-purge: missing ${missingLst.length} components.`); 
+                  }
 
                 if (typeof cb==='function') {cb();}
             }

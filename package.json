@@ -1,13 +1,13 @@
 {
   "name": "bower-purge",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "main": "index.js",
   "author": "alfalabs.net",
   "description":"utility to remove junk from bower_components folder optimized for Polymer components",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": " "
+    "url": "https://github.com/alfalabs/bower-purge.git"
   },
   "bin": {"bower-purge": "./bower-purge.js"},
   "dependencies": {
@@ -16,5 +16,6 @@
     "extfs": "0.0.7",
     "lodash": "^4.0.0",
     "walk": "~2.3.1"
-  }
+  },
+  "keywords":["bower", "polymer"]
 }

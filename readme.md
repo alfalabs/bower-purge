@@ -32,7 +32,7 @@ const bowerPurge = require('bower-purge');
 
 gulp.task('bower-purge', function(cb){
     process.chdir(buildFolder);
-    bowerPurge(false, cb);
+    bowerPurge({dryRun:false, quiet:true}, cb);
 });
 ```
 ## dryRun
