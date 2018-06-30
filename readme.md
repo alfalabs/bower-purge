@@ -11,7 +11,7 @@ add configuration to your project `bower.json` file
 
 ```javascript
 "bowerPurge": {
-    "deleteDir": ["/test/", "/demo/", "/helpers/", "/patterns/", "/templates/"],
+    "deleteDir": ["/test/", "/demo/"],
     "keep": ["bower.json", ".html", ".js"]
 }
 ```
