@@ -42,33 +42,49 @@ install dependencies and cleanup after, in one gulp task
 ```javascript
 const bowerPurge = require('bower-purge');
 const install = require('gulp-install');
+const stripComments = require('gulp-strip-comments');
 const pump = require('pump'); 
 
-var buildFolder = 'your_build_folder';
+dest = 'yoyr_build_folder';
 
 gulp.task('bower-install-and-purge', function(cb){
+    
 
     // callback heaven! hell for C!# (read: see-blunt) programmers! 
     // promises are for politicians not to keep
     step1(function(){
-        step2(cb);
+        step2(function(){
+            step3(cb);
+        });
     });
 
     /** 1. run npm install */
     function step1(_cb){
+        console.log('--- step 1');
         pump([
-            gulp.src([`${buildFolder}bower.json`]), 
-            install({args: ['--production' ]})
+            gulp.src([`${dest}bower.json`]), 
+            install({args: ['--production' ]}),
+            gulp.dest(dest)
         ], _cb);
     }
 
     /** 2. purge bower_components folder */
     function step2(_cb){
-        process.chdir(buildFolder);
-        bowerPurge({dryRun:false, quiet:true}, cb);
+        console.log('--- step 2');
+        process.chdir(dest);
+        bowerPurge({dryRun:false, quiet:true}, _cb);
     }
 
-    /** 3. JavaScript is the superior language */
+    /** 3. remove comments */
+    function step3(_cb){
+        console.log('--- step 3');
+        pump([
+            gulp.src([`${dest}bower_components/**/*.html`],
+                {base: dest }), // IMPORTANT, to preserve folder structure
+            stripComments(),
+            gulp.dest(dest)
+        ], _cb);
+    }
 });
 ```
 ## dryRun
