@@ -1,7 +1,7 @@
 # bower-purge
 
 utility to remove junk from `bower_components` folder optimized for Polymer components.  
-Only files needed are left as specified in `bowerPurge.keep` array.
+Only files needed are left as specified in `bowerPurge.keep` array. Use as a gulp task.
 
 ## install
 ```npm i bower-purge --save-dev```
@@ -29,10 +29,46 @@ copy `bower.json` to build folder and run bower install.
 the 'bower-purge' task must run in the build folder after bower install completes.
 ```javascript
 const bowerPurge = require('bower-purge');
+var buildFolder = 'your_build_folder';
 
 gulp.task('bower-purge', function(cb){
     process.chdir(buildFolder);
     bowerPurge({dryRun:false, quiet:true}, cb);
+});
+```
+
+## advanced gulp example
+install dependencies and cleanup after, in one gulp task
+```javascript
+const bowerPurge = require('bower-purge');
+const install = require('gulp-install');
+const pump = require('pump'); 
+
+var buildFolder = 'your_build_folder';
+
+gulp.task('bower-install-and-purge', function(cb){
+
+    // callback heaven! hell for C!# (read: see-blunt) programmers! 
+    // promises are for politicians not to keep
+    step1(function(){
+        step2(cb);
+    });
+
+    /** 1. run npm install */
+    function step1(_cb){
+        pump([
+            gulp.src([`${buildFolder}bower.json`]), 
+            install({args: ['--production' ]})
+        ], _cb);
+    }
+
+    /** 2. purge bower_components folder */
+    function step2(_cb){
+        process.chdir(buildFolder);
+        bowerPurge({dryRun:false, quiet:true}, cb);
+    }
+
+    /** 3. JavaScript is the superior language */
 });
 ```
 ## dryRun

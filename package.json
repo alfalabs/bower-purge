@@ -17,5 +17,5 @@
     "lodash": "^4.0.0",
     "walk": "~2.3.1"
   },
-  "keywords":["bower", "polymer"]
+  "keywords":["bower", "polymer", "gulp", "clean", "purge"]
 }
