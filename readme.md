@@ -43,12 +43,12 @@ install dependencies and cleanup after, in one gulp task
 const bowerPurge = require('bower-purge');
 const install = require('gulp-install');
 const stripComments = require('gulp-strip-comments');
+const htmlmin = require('gulp-htmlmin'); // can not minify JS ES6 because it uses uglifyJS
 const pump = require('pump'); 
 
-dest = 'yoyr_build_folder';
+dest = 'your_build_folder';
 
 gulp.task('bower-install-and-purge', function(cb){
-    
 
     // callback heaven! hell for C!# (read: see-blunt) programmers! 
     // promises are for politicians not to keep
@@ -60,7 +60,6 @@ gulp.task('bower-install-and-purge', function(cb){
 
     /** 1. run npm install */
     function step1(_cb){
-        console.log('--- step 1');
         pump([
             gulp.src([`${dest}bower.json`]), 
             install({args: ['--production' ]}),
@@ -70,18 +69,16 @@ gulp.task('bower-install-and-purge', function(cb){
 
     /** 2. purge bower_components folder */
     function step2(_cb){
-        console.log('--- step 2');
         process.chdir(dest);
         bowerPurge({dryRun:false, quiet:true}, _cb);
     }
 
-    /** 3. remove comments */
+    /** 3. minify html */
     function step3(_cb){
-        console.log('--- step 3');
         pump([
             gulp.src([`${dest}bower_components/**/*.html`],
-                {base: dest }), // IMPORTANT, to preserve folder structure
-            stripComments(),
+                {base: dest }), 
+            htmlmin({collapseWhitespace: true, removeComments: true}),
             gulp.dest(dest)
         ], _cb);
     }
