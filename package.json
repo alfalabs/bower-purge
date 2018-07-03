@@ -1,6 +1,6 @@
 {
   "name": "bower-purge",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "index.js",
   "author": "alfalabs.net",
   "description":"utility to remove junk from bower_components folder optimized for Polymer components",
