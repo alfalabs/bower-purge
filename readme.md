@@ -92,7 +92,7 @@ if you delete needed files, no worries, run `bower install` to restore them. (if
 in Windows CLI terminal, you can run `run.cmd` see this file for CLI usage.
 
 ## similar utility for `node_modules`
-try npm [gulp-dmn](https://www.npmjs.com/package/gulp-dmn) or github [alfalabs/gulp-dmn](https://github.com/alfalabs/gulp-dmn) 
+try npm [node-modules-prod](https://www.npmjs.com/package/node-modules-prod) or github [alfalabs/node-modules-prod](https://github.com/alfalabs/node-modules-prod) 
 
 ## credits
 based on  https://github.com/mkramb/bower-clean
